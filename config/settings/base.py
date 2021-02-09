@@ -183,6 +183,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "my_awesome_project.utils.context_processors.settings_context",
+                "notification.context_processors.notifications",
             ],
         },
     }
