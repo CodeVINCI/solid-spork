@@ -1,3 +1,29 @@
-# from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.generic import View
 
-# Create your views here.
+from .models import Notification
+
+
+class NotificationView(View):
+    template_name = "pages/notification.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+
+notification_view = NotificationView.as_view()
+
+
+class DeleteNotification(View):
+    def get(self, request, notification_id, *args, **kwargs):
+        if request.user.is_authenticated:
+            try:
+                notification = Notification.objects.get(id=notification_id)
+            except Notification.DoesNotExist:
+                notification = None
+            if notification is not None:
+                notification.delete()
+        return redirect("/notification/")
+
+
+delete_notification_view = DeleteNotification.as_view()

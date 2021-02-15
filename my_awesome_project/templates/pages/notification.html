@@ -4,7 +4,7 @@
   <h1>New Notifications</h1>
   <ul>
   {% for notification in unread_notifications %}
-  <li> {{ notification.message }}</li>
+  <li> {{ notification.message }}&emsp;<a href="{% url 'notifications:notificationdel' notification.id  %}">Delete</a></li>
   {% endfor %}
 </ul>
   <br>
@@ -12,7 +12,7 @@
   <h1>Read Notification</h1>
   <ul>
   {% for notification in read_notifications %}
-   <li>{{ notification.message }}</li>
+   <li>{{ notification.message }}&emsp;<a href="{% url 'notifications:notificationdel' notification.id  %}">Delete</a></li>
   {% endfor %}
 </ul>
 {% endblock content %}
