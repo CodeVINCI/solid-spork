@@ -14,5 +14,9 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def add_notification(self, message):
+        notification = Notification(to_user=self.user, message=message)
+        notification.save()
+
     class Meta:
         ordering = ["-created_at"]
