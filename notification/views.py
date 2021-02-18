@@ -5,10 +5,16 @@ from .models import Notification
 
 
 class NotificationView(View):
+
     template_name = "pages/notification.html"
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        response = render(request, self.template_name)
+        self.updatenotifications(request, response)
+        return response
+
+    def updatenotifications(self, request, response, *args, **kwargs):
+        request.user.notification.filter(seen=False).update(seen=True)
 
 
 notification_view = NotificationView.as_view()

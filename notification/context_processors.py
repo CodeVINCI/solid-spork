@@ -1,22 +1,25 @@
 # from .models import Notification
 
 
+class Notification_context:
+    def read_notifications(self, request):
+        user = request.user
+        return user.notification.filter(seen=True)
+
+    def unread_notifications(self, request):
+        return request.user.notification.filter(seen=False)
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return {"read_notifications": [], "unread_notifications": []}
+        read_notify = self.read_notifications(request)
+        unread_notify = self.unread_notifications(request)
+        response_object = {
+            "read_notifications": read_notify,
+            "unread_notifications": unread_notify,
+        }
+        return response_object
+
+
 def notifications(request):
-    if request.user.is_authenticated:
-        if request.get_full_path() == "/notification/":
-            read_notifications = list(request.user.notification.filter(seen=True))
-            unread_notifications = list(request.user.notification.filter(seen=False))
-            request.user.notification.filter(seen=False).update(seen=True)
-            return {
-                "read_notifications": read_notifications,
-                "unread_notifications": unread_notifications,
-            }
-        else:
-            read_notifications = request.user.notification.filter(seen=True)
-            unread_notifications = request.user.notification.filter(seen=False)
-            return {
-                "read_notifications": read_notifications,
-                "unread_notifications": unread_notifications,
-            }
-    else:
-        return {"read_notifications": [], "unread_notifications": []}
+    return Notification_context().get(request)
